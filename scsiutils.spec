@@ -1,10 +1,12 @@
 Summary:	SCSI utilities
+Summary(pl):	Narzêdzia do SCSI
 Name:		scsiutils
 Version:	1.7.2.10.000207
 Release:	1
 License:	GPL
-Group:		Utilities/System
-Group(pl):	Narzêdzia/System
+Group:		Applications/System
+Group(de):	Applikationen/System
+Group(pl):	Aplikacje/System
 Source0:	scsiinfo-1.7.tar.gz
 Source1:	http://www.torque.net/sg/p/sg_utils000207.tgz
 Source2:	http://www.garloff.de/kurt/linux/scsidev/scsidev-2.10.tar.gz
@@ -42,8 +44,10 @@ A collection of useful tools for users of SCSI systems:
 
 %package tk
 Summary:	Tk graphical frontend for scsiinfo
-Group:		X11/Utilities
-Group(pl):	X11/Narzêdzia
+Summary(pl):	Graficzny frontend do scsiinfo oparty o Tk
+Group:		X11/Applications
+Group(de):	X11/Applikationen
+Group(pl):	X11/Aplikacje
 Requires:	%{name} = %{version}
 Requires:	tk
 
@@ -67,7 +71,7 @@ cd ../scsidev-2.10
 %build
 cd scsiinfo-1.7
 %{__make} clean
-%{__make} OPT="$RPM_OPT_FLAGS"
+%{__make} OPT="%{rpmcflags}"
 
 cd ../scsidev-2.10
 %configure
@@ -75,7 +79,7 @@ cd ../scsidev-2.10
 
 cd ../sg_utils
 mv -f README README.sg
-%{__make} OPT="$RPM_OPT_FLAGS"
+%{__make} OPT="%{rpmcflags}"
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -97,15 +101,13 @@ cd ../sg_utils
 	DESTDIR=$RPM_BUILD_ROOT
 cd ..
 
-strip --strip-unneeded $RPM_BUILD_ROOT/sbin/* || :
-strip --strip-unneeded $RPM_BUILD_ROOT{%{_sbindir},%{_bindir}}/* || :
-strip --strip-unneeded $RPM_BUILD_ROOT%{_libdir}/scsi/* || :
-
 gunzip $RPM_BUILD_ROOT%{_mandir}/man8/*.gz
-gzip -9nf $RPM_BUILD_ROOT%{_mandir}/man8/* \
-	scsiinfo-1.7/{0-CHANGES,0-README.first,0-TODO} \
+gzip -9nf scsiinfo-1.7/{0-CHANGES,0-README.first,0-TODO} \
 	scsidev-2.10/{boot.diff,CHANGES,README,TODO} \
 	sg_utils/README.sg
+
+%clean
+rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
