@@ -9,8 +9,6 @@ Release:	1
 Epoch:		1
 License:	GPL v2
 Group:		Applications/System
-Group(de):	Applikationen/System
-Group(pl):	Aplikacje/System
 Source0:	ftp://tsx-11.mit.edu/pub/linux/ALPHA/scsi/scsiinfo-%{scsiinfo_ver}.tar.gz
 Source1:	http://www.torque.net/sg/p/sg_utils-%{sg_utils_ver}.tgz
 Source2:	http://www.garloff.de/kurt/linux/scsidev/scsidev-%{scsidev_ver}.tar.gz
@@ -73,8 +71,6 @@ pakiecie scsiutils-tk.
 Summary:	Tk graphical frontend for scsiinfo
 Summary(pl):	Graficzny frontend do scsiinfo oparty o Tk
 Group:		X11/Applications
-Group(de):	X11/Applikationen
-Group(pl):	X11/Aplikacje
 Requires:	%{name} = %{version}
 Requires:	tk
 
