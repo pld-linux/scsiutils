@@ -16,6 +16,7 @@ Patch3:		scsiinfo-tmpdir.patch
 Patch4:		sg_utils-makefile.patch
 Patch5:		sg_utils-misc.patch
 Patch6:		scsidev-makefile.patch
+BuildRequires:	tk-devel
 Provides:	scsiinfo sg_utils scsidev
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
