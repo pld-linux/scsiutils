@@ -100,7 +100,7 @@ cd scsiinfo-%{scsiinfo_ver}
 
 cd ../scsidev-%{scsidev_ver}
 aclocal
-autoconf
+%{__autoconf}
 %configure
 %{__make}
 
