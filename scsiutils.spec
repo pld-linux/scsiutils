@@ -7,7 +7,7 @@ License:	GPL
 Group:		Applications/System
 Group(de):	Applikationen/System
 Group(pl):	Aplikacje/System
-Source0:	scsiinfo-1.7.tar.gz
+Source0:	ftp://tsx-11.mit.edu/pub/linux/ALPHA/scsi/scsiinfo-1.7.tar.gz
 Source1:	http://www.torque.net/sg/p/sg_utils000207.tgz
 Source2:	http://www.garloff.de/kurt/linux/scsidev/scsidev-2.10.tar.gz
 Source3:	http://www.garloff.de/kurt/linux/rescan-scsi-bus.sh
