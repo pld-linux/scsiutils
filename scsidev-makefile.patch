@@ -1,15 +1,13 @@
---- scsidev-2.10/Makefile.in~	Mon Feb 14 23:54:03 2000
-+++ scsidev-2.10/Makefile.in	Mon Aug  7 00:59:41 2000
-@@ -47,10 +47,8 @@
+--- scsidev-2.35/Makefile.in	2002-10-03 15:43:08.000000000 +0000
++++ scsidev-2.35.new/Makefile.in	2005-01-03 23:15:37.767389208 +0000
+@@ -48,8 +48,8 @@
  	cd $(srcdir) && autoconf
  
  install: scsidev
--	install -o root -g root -m 755 -s scsidev $(bindir)
--	install -o root -g root -m 644 scsidev.8 $(mandir)
--	gzip -9f $(mandir)/scsidev.8
--	if [ ! -d /dev/scsi ]; then mkdir /dev/scsi; fi
+-	install -d $(bindir)
+-	install -m 755 -s scsidev $(bindir)
++	install -d $(DESTDIR)$(bindir)
 +	install -m 755 -s scsidev $(DESTDIR)$(bindir)
-+	install -m 644 scsidev.8 $(DESTDIR)$(mandir)
- 	#install -d /usr/doc/packages/scsidev
- 	#install COPYING boot.diff README scsi.alias /usr/doc/packages/scsidev/
- 
+ 	install -d $(mandir)
+ 	install -m 644 scsidev.8 $(mandir)
+ 	gzip -9f $(mandir)/scsidev.8
