@@ -5,7 +5,7 @@ Summary:	SCSI utilities
 Summary(pl):	Narzêdzia do SCSI
 Name:		scsiutils
 Version:	%{scsiinfo_ver}.%{scsidev_ver}.%{sg_utils_ver}
-Release:	1
+Release:	2
 Epoch:		1
 License:	GPL v2
 Group:		Applications/System
@@ -16,7 +16,7 @@ Source1:	http://www.torque.net/sg/p/sg_utils-%{sg_utils_ver}.tgz
 Source2:	http://www.garloff.de/kurt/linux/scsidev/scsidev-%{scsidev_ver}.tar.gz
 # Source2-md5:	0401dc3afbd8c6a66c704b6391701640
 Source3:	http://www.garloff.de/kurt/linux/rescan-scsi-bus.sh
-# Source3-md5:	5d63fa32b14da5c422cfa45ed6ba4f47
+# Source3-md5:	c77191126d23f8cd2501a02120c425a7
 Patch0:		scsiinfo-glibc.patch
 Patch1:		scsiinfo-makefile.patch
 Patch2:		scsiinfo-misc.patch
