@@ -99,7 +99,7 @@ cd scsiinfo-%{scsiinfo_ver}
 %{__make} OPT="%{rpmcflags}"
 
 cd ../scsidev-%{scsidev_ver}
-aclocal
+%{__aclocal}
 %{__autoconf}
 %configure
 %{__make}
