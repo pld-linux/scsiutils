@@ -74,7 +74,7 @@ pakiecie scsiutils-tk.
 Summary:	Tk graphical frontend for scsiinfo
 Summary(pl):	Graficzny frontend do scsiinfo oparty o Tk
 Group:		X11/Applications
-Requires:	%{name} = %{version}
+Requires:	%{name} = %{epoch}:%{version}
 Requires:	tk
 
 %description tk
