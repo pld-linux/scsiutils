@@ -5,7 +5,7 @@ Summary:	SCSI utilities
 Summary(pl):	Narzêdzia do SCSI
 Name:		scsiutils
 Version:	%{scsiinfo_ver}.%{scsidev_ver}.%{sg_utils_ver}
-Release:	3
+Release:	4
 Epoch:		1
 License:	GPL v2
 Group:		Applications/System
@@ -29,6 +29,8 @@ BuildRequires:	automake
 BuildRequires:	tk-devel
 Provides:	scsiinfo sg_utils scsidev
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+
+%define		_ulibdir	%{_prefix}/lib
 
 %description
 A collection of useful tools for users of SCSI systems:
@@ -75,7 +77,7 @@ pakiecie scsiutils-tk.
 Summary:	Tk graphical frontend for scsiinfo
 Summary(pl):	Graficzny frontend do scsiinfo oparty o Tk
 Group:		X11/Applications
-Requires:	%{name} = %{epoch}:%{version}
+Requires:	%{name} = %{epoch}:%{version}-%{release}
 Requires:	tk
 
 %description tk
@@ -101,7 +103,8 @@ cd ../scsidev-%{scsidev_ver}
 %build
 cd scsiinfo-%{scsiinfo_ver}
 %{__make} clean
-%{__make} OPT="%{rpmcflags}"
+%{__make} \
+	OPT="%{rpmcflags}"
 
 cd ../scsidev-%{scsidev_ver}
 %{__aclocal}
@@ -111,27 +114,26 @@ cd ../scsidev-%{scsidev_ver}
 
 cd ../sg_utils-%{sg_utils_ver}
 mv -f README README.sg
-%{__make} OPT="%{rpmcflags}" PREFIX=%{_prefix}
+%{__make} \
+	OPT="%{rpmcflags}" \
+	PREFIX=%{_prefix}
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/sbin,%{_sbindir},%{_bindir},%{_libdir}/scsi,%{_mandir}/man8}
+install -d $RPM_BUILD_ROOT{/sbin,%{_sbindir},%{_bindir},%{_ulibdir}/scsi,%{_mandir}/man8}
 
-cd scsiinfo-%{scsiinfo_ver}
-%{__make} install \
+%{__make} -C scsiinfo-%{scsiinfo_ver} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-cd ../scsidev-%{scsidev_ver}
-%{__make} install \
+%{__make} -C scsidev-%{scsidev_ver} install \
 	DESTDIR=$RPM_BUILD_ROOT \
 	bindir=/sbin
 
 install %{SOURCE3} $RPM_BUILD_ROOT/sbin/rescan-scsi-bus
 
-cd ../sg_utils-%{sg_utils_ver}
-%{__make} install \
-	DESTDIR=$RPM_BUILD_ROOT PREFIX=%{_prefix}
-cd ..
+%{__make} -C sg_utils-%{sg_utils_ver} install \
+	DESTDIR=$RPM_BUILD_ROOT \
+	PREFIX=%{_prefix}
 
 gunzip $RPM_BUILD_ROOT%{_mandir}/man8/*.gz
 
@@ -183,21 +185,21 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/scsi-config
 %attr(755,root,root) %{_bindir}/tk_scsiformat
-%dir %{_libdir}/scsi
-%attr(755,root,root) %{_libdir}/scsi/cache
-%attr(755,root,root) %{_libdir}/scsi/control
-%attr(755,root,root) %{_libdir}/scsi/disconnect
-%attr(755,root,root) %{_libdir}/scsi/error
-%attr(755,root,root) %{_libdir}/scsi/format
-%attr(644,root,root) %{_libdir}/scsi/generic
-%attr(755,root,root) %{_libdir}/scsi/inquiry
-%attr(755,root,root) %{_libdir}/scsi/notch
-%attr(755,root,root) %{_libdir}/scsi/overview
-%attr(755,root,root) %{_libdir}/scsi/peripheral
-%attr(755,root,root) %{_libdir}/scsi/rigid
-%attr(755,root,root) %{_libdir}/scsi/save-changes
-%attr(755,root,root) %{_libdir}/scsi/save-file
-%attr(755,root,root) %{_libdir}/scsi/tworands
-%attr(755,root,root) %{_libdir}/scsi/verify
+%dir %{_ulibdir}/scsi
+%attr(755,root,root) %{_ulibdir}/scsi/cache
+%attr(755,root,root) %{_ulibdir}/scsi/control
+%attr(755,root,root) %{_ulibdir}/scsi/disconnect
+%attr(755,root,root) %{_ulibdir}/scsi/error
+%attr(755,root,root) %{_ulibdir}/scsi/format
+%attr(644,root,root) %{_ulibdir}/scsi/generic
+%attr(755,root,root) %{_ulibdir}/scsi/inquiry
+%attr(755,root,root) %{_ulibdir}/scsi/notch
+%attr(755,root,root) %{_ulibdir}/scsi/overview
+%attr(755,root,root) %{_ulibdir}/scsi/peripheral
+%attr(755,root,root) %{_ulibdir}/scsi/rigid
+%attr(755,root,root) %{_ulibdir}/scsi/save-changes
+%attr(755,root,root) %{_ulibdir}/scsi/save-file
+%attr(755,root,root) %{_ulibdir}/scsi/tworands
+%attr(755,root,root) %{_ulibdir}/scsi/verify
 %{_mandir}/man8/scsi-config.8*
 %{_mandir}/man8/tk_scsiformat.8*
