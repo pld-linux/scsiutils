@@ -1,0 +1,9 @@
+- initial revision
+
+* Fri Mar 03 2000 - garloff@suse.de
+- Initial creation of package, containing
+  * scsiinfo-1.7
+  * scsiformat
+  * scsidev-2.10
+  * rescan-scsi-bus.sh
+  * sg_utils000207
