@@ -19,6 +19,8 @@ Patch4:		sg_utils-makefile.patch
 Patch5:		sg_utils-misc.patch
 Patch6:		scsidev-makefile.patch
 BuildRequires:	tk-devel
+BuildRequires:	autoconf
+BuildRequires:	automake
 Provides:	scsiinfo sg_utils scsidev
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -35,12 +37,34 @@ A collection of useful tools for users of SCSI systems:
   remains unchanged in most of these cases.
 - rescan-scsi-bus.sh: Script that scans the SCSI bus and dynamicaaly
   adds (and optionally removes) devices.
-- sg_utils: A colection of small useful tools, that are baysed on the
-  sg interface and give info on the SCSI bus, copy data, ... Warning:
+- sg_utils: A colection of small useful tools, that are based on the
+  sg interface and give info on the SCSI bus, copy data... Warning:
   Some of these tools access the internals of your system and a wrong
-  usage of them may render your system inoperational. Note: scsiinfo
-  comes with a graphical user interface which can be found in the xscsi
-  package.
+  usage of them may render your system inoperational.
+
+Note: scsiinfo comes with a graphical user interface which can be found
+in the scsiutils-tk package.
+
+%description -l pl
+Zestaw u¿ytecznych narzêdzi dla u¿ytkowników systemów SCSI:
+- scsiinfo: pozwala na dostêp do niektórych informacji wewnêtrznych
+  SCSI, takich jak listy defektów, strony trybów (kontroluj±cych
+  zachowanie cache urz±dzenia i obs³ugê b³êdów).
+- scsiformat: narzêdzie do niskopoziomowego formatowania dysków SCSI.
+- scsidev: je¿eli Twoja konfiguracja SCSI zmienia siê, np. poniewa¿
+  masz urz±dzenia zewnêtrzne nie zawsze pod³±czone lub w³±czone,
+  mapowania j±dra dotycz±ce urz±dzeñ SCSI nie s± takie same. Ten
+  program tworzy mapowanie nie zmieniaj±ce siê w wiêkszo¶ci
+  przypadków.
+- rescan-scsi-bus.sh: skrypt skanuj±cy szynê SCSI i dynamicznie
+  dodaj±cy (opcjonalnie tak¿e usuwaj±cy) urz±dzenia.
+- sg_utils: zestaw ma³ych narzêdzi bazuj±cych na interfejsie sg
+  udostêpniaj±cych informacje o szynie SCSI, kopiuj±cych dane...
+  Uwaga: czê¶æ z nich u¿ywa dostêpu do wnêtrzno¶ci systemu i z³e ich
+  u¿ycie mo¿e uczyniæ system niedzia³aj±cym.
+
+Dostêpny jest interfejs graficzny do scsiinfo - znajduje siê w
+pakiecie scsiutils-tk.
 
 %package tk
 Summary:	Tk graphical frontend for scsiinfo
@@ -54,6 +78,10 @@ Requires:	tk
 %description tk
 For visualization and manipulation of SCSI mode pages, scsiinfo comes
 with graphical interface.
+
+%description tk -l pl
+Graficzny interfejs do scsiinfo - do wizualizacji i manipulowania
+stronami trybów SCSI.
 
 %prep
 %setup -q -c -a1 -a2
