@@ -1,0 +1,272 @@
+diff -uNr scsiinfo-1.7.orig/scsi-config scsiinfo-1.7/scsi-config
+--- scsiinfo-1.7.orig/scsi-config	Thu Aug 21 03:59:27 1997
++++ scsiinfo-1.7/scsi-config	Tue Feb 29 22:28:28 2000
+@@ -16,7 +17,7 @@
+ 	 configuration options for a scsi device}
+     pack .warn.h.l .warn.h.m -side left -padx 10
+     frame .warn.f
+-    button .warn.f.quit -text "Quit" -command exit \
++    button .warn.f.quit -text "Quit" -command {[exec rm -fr $tmpdir ;exit]} \
+ 	-activeforeground white -activebackground red
+     button .warn.f.continue -text "Continue anyway" -activebackground green \
+ 	-command {destroy .warn}
+@@ -26,6 +27,17 @@
+     tkwait window .warn
+ }
+ 
++# security counter measures
++set tmpdir "/tmp/.scsi-config"
++
++
++exec rm -rf $tmpdir
++if {![file exists $tmpdir]} {exec mkdir $tmpdir }
++
++#exec rm -rf $tmpdir
++#if { [exec mkdir $tmpdir] != 0 } exit;
++
++
+ set sdevice $argv
+ while { [string compare [lindex $sdevice 0] ""] == 0 } {
+     frame .select
+@@ -34,7 +46,7 @@
+     message .select.h.m -aspect 200 -background pink -text \
+ 	{Select a scsi device}
+     frame .select.f
+-    button .select.f.quit -text "Quit" -command exit \
++    button .select.f.quit -text "Quit" -command {[exec rm -fr $tmpdir ;exit]} \
+ 	-activeforeground white -activebackground red
+     button .select.f.continue -text "Continue" -activebackground green \
+ 	-command {destroy .select}
+@@ -42,11 +54,11 @@
+     pack .select.h.l .select.h.m -side left -padx 10
+     pack .select.h .select.f -pady 10
+     pack .select
+-    exec /usr/bin/scsiinfo -l > /tmp/devices
+-    if {[catch {set file [open /tmp/devices r]}] == 1} return;
++    exec /usr/bin/scsiinfo -l > $tmpdir/devices
++    if {[catch {set file [open $tmpdir/devices r]}] == 1} return;
+     gets $file line
+     close $file
+-    exec rm /tmp/devices
++    exec rm $tmpdir/devices
+     set n 0
+     foreach x $line { 
+        radiobutton .select.$n -text "$x" -width 10   -variable sdevice -value $x -anchor w
+@@ -59,6 +71,7 @@
+ 	.select.0 select
+     }
+     tkwait window .select
++#    exec rm -rf $tmpdir
+ }
+ 
+ proc showdef {flag} {
+@@ -117,14 +130,14 @@
+ frame .f_top
+ 
+ set line {}
+-exec /usr/bin/scsiinfo -X -L $sdevice > /tmp/cachepage
+-if {[catch {set file [open /tmp/cachepage r]}] == 1} return;
++exec /usr/bin/scsiinfo -X -L $sdevice > $tmpdir/cachepage
++if {[catch {set file [open $tmpdir/cachepage r]}] == 1} return;
+ gets $file line
+ set pages_sup [lindex $line 0]
+ set pages_notch [lindex $line 1]
+ set curr_not [lindex $line 2]
+ close $file
+-exec rm /tmp/cachepage
++exec rm $tmpdir/cachepage
+ 
+ button .f_top.info -text "Device Info" -command "exec /usr/lib/scsi/inquiry $sdevice" \
+ 	-activebackground green
+@@ -142,7 +155,7 @@
+ 
+ pack .f_top.filesave -side left -padx 12 -ipadx 2 -ipady 2
+ 
+-button .f_top.quit -text "Quit" -command { exit } \
++button .f_top.quit -text "Quit" -command {[exec rm -fr $tmpdir ;exit]} \
+ 	-activebackground red -activeforeground white
+ 
+ pack .f_top.quit -side left -padx 12 -ipadx 2 -ipady 2
+@@ -202,12 +215,12 @@
+ 
+   exec /usr/lib/scsi/notch $sdevice
+   set line {}
+-  exec /usr/bin/scsiinfo -X -L $sdevice > /tmp/cachepage
+-  if {[catch {set file [open /tmp/cachepage r]}] == 1} return;
++  exec /usr/bin/scsiinfo -X -L $sdevice > $tmpdir/cachepage
++  if {[catch {set file [open $tmpdir/cachepage r]}] == 1} return;
+   gets $file line
+   set curr_not [lindex $line 2]
+   close $file
+-  exec rm /tmp/cachepage
++  exec rm $tmpdir/cachepage
+   .notchinfo.notchnum configure -text $curr_not
+ }
+ 
+diff -uNr scsiinfo-1.7.orig/tk/inquiry scsiinfo-1.7/tk/inquiry
+--- scsiinfo-1.7.orig/tk/inquiry	Tue Nov 29 17:27:18 1994
++++ scsiinfo-1.7/tk/inquiry	Tue Feb 29 22:28:28 2000
+@@ -1,9 +1,11 @@
+-#!/usr/bin/wish -f
++#!/usr/bin/wish -f
+ # Copyright 1993 Yggdrasil Computing, Incorporated
+ # You may copy this file according to the terms and conditions of version 2
+ # of the GNU General Public License as published by the Free Software
+ # Foundation.
+ 
++set inqdir ""
++
+ frame .h
+ label .h.info -bitmap info -bg pink
+ message .h.message -width 400 -bg pink -text \
+@@ -14,7 +16,7 @@
+ 
+ frame .buttons
+ button .buttons.quit -text Quit \
+-	-activeforeground white -activebackground red -command exit
++	-activeforeground white -activebackground red -command {[exec rm -fr /tmp/.inquiry ;exit]} 
+ 
+ pack  .buttons.quit  -side left -padx 10 -pady 3
+ pack .buttons
+@@ -154,8 +156,21 @@
+     global text_list
+     global switch
+     set line {}
+-    exec /usr/bin/scsiinfo -X $switch $option $device > /tmp/cachepage
+-    if {[catch {set file [open /tmp/cachepage r]}] == 1} return;
++
++
++#    exec rm -rf $inqdir
++    set inqdir "/tmp/.inquiry"
++    if {![file exists $inqdir]} {exec mkdir $inqdir }
++
++
++#    set make_dir [ catch {eval {exec mkdir /tmp/.inquiry} } ]
++#    if { $make_dir != 0 } {
++#	puts "Error: Can't create /tmp/.inquiry"
++#	exit
++#    }
++
++    exec /usr/bin/scsiinfo -X $switch $option $device > /tmp/.inquiry/cachepage
++    if {[catch {set file [open /tmp/.inquiry/cachepage r]}] == 1} return;
+     gets $file line
+     set first [lindex $line 0]
+     set second [lindex $line 1]
+@@ -185,7 +200,7 @@
+     .revision.text insert end $line
+     .revision.text configure -state disabled
+     close $file
+-    exec rm /tmp/cachepage
++    exec rm -rf /tmp/.inquire
+ }
+ 
+ read_page $argv "-X"
+diff -uNr scsiinfo-1.7.orig/tk/overview scsiinfo-1.7/tk/overview
+--- scsiinfo-1.7.orig/tk/overview	Sun Aug 24 19:04:22 1997
++++ scsiinfo-1.7/tk/overview	Tue Feb 29 22:28:28 2000
+@@ -30,7 +30,10 @@
+      set line [ exec scsiinfo -nX $sdevice ]
+      set line [ lreplace $line 3 3 $notch ]
+ # Use /bin/sh to cut $line in multiple pieces
+-     set line [ exec sh -c "scsiinfo -nXR $sdevice $line" ]
++	exec sh -c "scsiinfo -nXR $sdevice $line"
++
++#     set line [ exec sh -c "scsiinfo -nXR $sdevice $line" ]
++
+ #    exec scsiinfo -nX $sdevice >/dev/tty
+   }
+ }
+diff -uNr scsiinfo-1.7.orig/tk/peripheral scsiinfo-1.7/tk/peripheral
+--- scsiinfo-1.7.orig/tk/peripheral	Sun Nov 27 01:20:11 1994
++++ scsiinfo-1.7/tk/peripheral	Tue Feb 29 22:28:28 2000
+@@ -29,12 +29,12 @@
+     global text_list
+     global switch
+     set line {}
+-    exec /usr/bin/scsiinfo -X $switch $option $device > /tmp/cachepage 2> /dev/null
+-    if {[catch {set file [open /tmp/cachepage r]}] == 1} return;
++    exec /usr/bin/scsiinfo -X $switch $option $device > /tmp/.peripheral/cachepage 2> /dev/null
++    if {[catch {set file [open /tmp/.peripheral/cachepage r]}] == 1} return;
+     gets $file line
+     gets $file asciidesc
+     close $file
+-    exec rm /tmp/cachepage
++    exec rm /tmp/.peripheral/cachepage
+ 
+     .ident.text delete 1.0 end
+     .ident.text insert end [lindex $line 0]
+@@ -51,11 +51,11 @@
+     global text_list
+     global switch
+     set line {}
+-    exec /usr/bin/scsiinfo -X -m $switch $device > /tmp/cachepage
+-    if {[catch {set file [open /tmp/cachepage r]}] == 1} return;
++    exec /usr/bin/scsiinfo -X -m $switch $device > /tmp/.peripheral/cachepage
++    if {[catch {set file [open /tmp/.peripheral/cachepage r]}] == 1} return;
+     gets $file line
+     close $file
+-    exec rm /tmp/cachepage
++    exec rm /tmp/.peripheral/cachepage
+ 
+     if { [ string compare [lindex $line 0] "0" ] == 0} \
+       then { .ident.text configure -state disabled } \
+@@ -82,11 +82,11 @@
+     set r3 [concat $r3 @[.vendor.text get 1.0 end]]
+ 
+ 
+-    set file [open /tmp/wrscsi w]
++    set file [open /tmp/.peripheral/wrscsi w]
+     puts $file "/usr/bin/scsiinfo $r3"
+     close $file
+-    exec sh < /tmp/wrscsi
+-    exec rm /tmp/wrscsi
++    exec sh < /tmp/.peripheral/wrscsi
++    exec rm /tmp/.peripheral/wrscsi
+ }
+ 
+ 
+@@ -103,6 +103,14 @@
+ 
+ frame .f1
+ 
++exec rm -rf /tmp/.peripheral
++set make_dir [ catch {eval {exec mkdir /tmp/.peripheral} } ]
++if { $make_mkdir != 0 } {
++     puts "Error: Can't create /tmp/.peripheral"
++     exit
++}
++
++
+ generate_textboxes
+ 
+ pack .ident .identasc .vendor -in .f1 -pady 10 -anchor w
+@@ -110,3 +118,5 @@
+ 
+ read_page $argv "-X"
+ read_modifiable $argv
++
++exec rm -rf /tmp/.peripheral
+diff -uNr scsiinfo-1.7.orig/tk_scsiformat scsiinfo-1.7/tk_scsiformat
+--- scsiinfo-1.7.orig/tk_scsiformat	Sat Aug 23 14:02:23 1997
++++ scsiinfo-1.7/tk_scsiformat	Tue Feb 29 22:28:28 2000
+@@ -128,7 +128,7 @@
+     } else {
+ 	set label "Other ($par_mkfs)"
+     }
+-    .f_def.part.menu.mkfs entryconfigure [expr [llength $par_mkfscmds] + 1] -label "$label"
++    .f_def.part.menu.mkfs entryconfigure [expr [llength $par_mkfscmds] + 1] -label "$label" 
+ }
+ 
+ proc bind_eedit {w} {
+@@ -872,9 +872,9 @@
+    global check_cmd format_initiator
+ 
+    set security "-F'Ene Mene Meck, und Du bist weg!'"
+-   append fcmd " $security -t0 -X $sdevice"
++   append fcmd " $security -t0 -X $sdevice >& /tmp/scsiformat.$$"
+    
+-   if { [catch {exec sh -c "$fcmd" >& /tmp/scsiformat.[pid] } err] != 0 } then {
++   if { [catch {exec sh -C -c "$fcmd" } err] != 0 } then {
+         set fd [open /tmp/scsiformat.[pid] r]
+ 	set err "$err\x0a[read $fd]"
+ 	close $fd

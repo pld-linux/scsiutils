@@ -1,0 +1,63 @@
+diff -uNr scsiinfo-1.7.orig/sgcheck scsiinfo-1.7/sgcheck
+--- scsiinfo-1.7.orig/sgcheck	Thu Jan  1 01:00:00 1970
++++ scsiinfo-1.7/sgcheck	Tue Feb 29 22:28:28 2000
+@@ -0,0 +1,47 @@
++#! /usr/bin/perl
++#
++# checks the attached SCSI devices and gives you the generic
++# SCSI device attached to it
++#
++
++if ( $ARGV[0] eq "" ) {
++  $scsiprocfile = "/proc/scsi/scsi";
++}
++else {
++  $scsiprocfile = $ARGV[0];
++}
++
++sub cut_trailing_blanks {
++  local ($s) = @_;
++  local ($x);
++  $s =~ /(\s*)$/;
++  return substr($s, 0, length($s) - length($1));
++}
++
++open(FIN, "<$scsiprocfile") || die "Can't open $scsiprocfile";
++
++$sgminor = -1;
++
++print "\nAssignment of generic SCSI devices,\n";
++print "device host/channel/ID/LUN type(numeric type) vendor model:\n\n";
++
++LINE: while (<FIN>) {
++  if ( /^Attached devices:/ ) {next LINE;}
++  if ( /^Host:\s+scsi(\d)\s+Channel:\s+(\d+)\s+Id:\s(\d+)\s+Lun:\s+(\d+)/ ) {
++    $sgminor++;
++    $host = $1;
++    $channel = $2 * 1;
++    $id = $3 * 1;
++    $lun = $4 * 1;
++  }
++  if ( /^\s+Vendor:\s+(.+)\s+Model:\s+(.+)\s+Rev:\s+(.+)/ ) {
++    $vendor = cut_trailing_blanks($1);
++    $model = cut_trailing_blanks($2);
++    $rev = cut_trailing_blanks($3);
++  }
++  if ( /^\s+Type:\s+(.+)\s+ANSI SCSI revision:/ ) {
++    $type = cut_trailing_blanks($1);
++    print "/dev/sg$sgminor $host/$channel/$id/$lun $type $vendor $model\n";
++  }
++}
++close(FIN)
+diff -uNr scsiinfo-1.7.orig/tworands.c scsiinfo-1.7/tworands.c
+--- scsiinfo-1.7.orig/tworands.c	Tue Aug 19 03:22:23 1997
++++ scsiinfo-1.7/tworands.c	Tue Feb 29 22:28:28 2000
+@@ -6,7 +6,7 @@
+ #include <sys/time.h>
+ #include <unistd.h>
+ 
+-int main(int argc) {
++int main(int argc, char *argv[]) {
+     struct timeval tv;
+ 
+     if (argc != 1) {

@@ -1,0 +1,50 @@
+diff -uNr scsiinfo-1.7.orig/scsiformat.c scsiinfo-1.7/scsiformat.c
+--- scsiinfo-1.7.orig/scsiformat.c	Sat Aug 23 16:02:50 1997
++++ scsiinfo-1.7/scsiformat.c	Tue Feb 29 23:12:37 2000
+@@ -45,8 +45,14 @@
+ #include <sys/wait.h>
+ #include <sys/stat.h>
+ #include <sys/ioctl.h>
++#if defined __GLIBC__ && __GLIBC__ >= 2
++#include <sys/user.h>
++#include <sys/mount.h>
++#include <sys/swap.h>
++#else
+ #include <linux/swap.h>
+ #include <linux/fs.h>
++#endif
+ #include <linux/hdreg.h>
+ #include <linux/genhd.h>
+ 
+@@ -736,7 +742,7 @@
+ 	if (!par_deflistform) {
+ 	    fprintf(fh, "\nUser supplied defect logical blocks:\n");
+ 	    for (i = off = 0; off < par_defectlen; i++, off += 4) {
+-		fprintf(fh, " %9lu", ntohl(par_defects[i]));
++		fprintf(fh, " %9u", ntohl(par_defects[i]));
+ 		if ((i & 7) == 7) {
+ 		    fprintf(fh, "\n");
+ 		    flag = 1;
+@@ -747,7 +753,7 @@
+ 	    fprintf(fh, "\nUser supplied defects in Cylinder:Head:%s format:\n",
+ 	     par_deflistform == 5 ? "PhysicalSector" : "BytesFromIndex");
+ 	    for (i = off = 0; off < par_defectlen; i += 2, off += 8) {
+-		sprintf(buffer, " %lu:%lu:%ld", ntohl(par_defects[i]) >> 8,
++		sprintf(buffer, " %u:%u:%ld", ntohl(par_defects[i]) >> 8,
+ 			ntohl(par_defects[i]) & 255, (long) ntohl(par_defects[i + 1]));
+ 		fprintf(fh, "%20s", buffer);
+ 		if ((i & 3) == 3) {
+@@ -905,8 +911,11 @@
+     unsigned char sig2catch[] =
+     {SIGHUP, SIGINT, SIGQUIT, SIGILL, SIGABRT, SIGFPE,
+      SIGSEGV, SIGPIPE, SIGALRM, SIGTERM, SIGUSR1, SIGUSR2, SIGTRAP,
+-     SIGIOT, SIGBUS, SIGSTKFLT, SIGIO, SIGXCPU, SIGXFSZ, SIGVTALRM,
+-     SIGPROF, SIGPWR};
++     SIGIOT, SIGBUS, 
++#ifdef SIGSTKFLT
++     SIGSTKFLT,
++#endif
++     SIGIO, SIGXCPU, SIGXFSZ, SIGVTALRM, SIGPROF, SIGPWR};
+ 
+     siga.sa_handler = term_handler;
+     siga.sa_flags = SA_ONESHOT | SA_NOMASK;
