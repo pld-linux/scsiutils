@@ -16,7 +16,8 @@ Source1:	http://www.torque.net/sg/p/sg_utils-%{sg_utils_ver}.tgz
 Source2:	http://www.garloff.de/kurt/linux/scsidev/scsidev-%{scsidev_ver}.tar.gz
 # Source2-md5:	0401dc3afbd8c6a66c704b6391701640
 Source3:	http://www.garloff.de/kurt/linux/rescan-scsi-bus.sh
-# Source3-md5:	c77191126d23f8cd2501a02120c425a7
+# It is md5 of the original file, in CVS we have different because of CVS tags
+# NoSource3-md5:	8d1b28c31b1edda2849fba7b0910b93f
 Patch0:		scsiinfo-glibc.patch
 Patch1:		scsiinfo-makefile.patch
 Patch2:		scsiinfo-misc.patch
