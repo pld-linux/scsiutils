@@ -1,43 +1,33 @@
-diff -uNr sg_utils.orig/Makefile sg_utils/Makefile
---- sg_utils.orig/Makefile	Sat Feb  5 20:35:07 2000
-+++ sg_utils/Makefile	Fri Mar  3 22:41:25 2000
-@@ -6,7 +6,7 @@
- EXECS = sg_poll sg_dd512 sgq_dd512 sg_whoami \
- 	sg_inquiry sg_tst_med sg_debug sg_scan sg_dd2048 \
- 	sg_rbuf sginfo sg_runt_ex sg_simple1 sg_simple2 \
--	sg_readcap scsi_inquiry sgp_dd sg_map
-+	sg_readcap scsi_inquiry sgp_dd sg_map sg_test_rwbuf
+--- ./Makefile.org	Sun Jan 13 00:10:07 2002
++++ ./Makefile	Sun Jan 13 00:17:19 2002
+@@ -2,7 +2,7 @@
  
- COMMON = sg_dd512 sg_dd2048 sg_scan sg_rbuf sg_tst_med sg_inquiry \
- 	 sginfo sg_runt_ex sg_readcap sg_simple2 scsi_inquiry
-@@ -16,7 +16,7 @@
+ PREFIX=/usr/local
+ INSTDIR=$(DESTDIR)/$(PREFIX)/bin
+-MANDIR=$(DESTDIR)/$(PREFIX)/man
++MANDIR=$(DESTDIR)/$(PREFIX)/share/man
  
- INCLUDES =
+ CC = gcc
+ LD = gcc
+@@ -17,7 +17,7 @@
+ MAN_PGS = sg_dd.8 sgp_dd.8 sg_map.8 sg_rbuf.8
+ MAN_PREF = man8
  
--CFLAGS = -g -Wall -pedantic
-+CFLAGS = $(OPT) -Wall -pedantic
+-CFLAGS = -g -O2 -Wall -D_REENTRANT
++CFLAGS = $(OPT) -Wall -D_REENTRANT
+ # CFLAGS = -g -O2 -Wall -D_REENTRANT -DSG_KERNEL_INCLUDES
+ # CFLAGS = -g -O2 -Wall -pedantic -D_REENTRANT
  
- LDFLAGS =
- 
-@@ -57,6 +57,9 @@
- sg_rbuf: sg_rbuf.o sg_err.o
- 	$(LD) -o sg_rbuf $(LDFLAGS) sg_rbuf.o sg_err.o $(ILIBS) 
- 
-+sg_test_rwbuf: sg_test_rwbuf.o sg_err.o
-+	$(LD) -o $@ $(LDFLAGS) $^ $(ILIBS)
-+
- sginfo: sginfo.o sg_err.o
- 	$(LD) -o sginfo $(LDFLAGS) sginfo.o sg_err.o $(ILIBS) 
- 
-@@ -83,4 +86,11 @@
- 
- sg_map: sg_map.o
- 	$(LD) -o sg_map $(LDFLAGS) sg_map.o $(ILIBS) 
-+
-+INSTDIR=/usr/bin
-+install: $(EXECS) $(COMMON)
-+	install -d $(DESTDIR)$(INSTDIR)
-+	for name in $^; \
-+	 do install -s -m 755 $$name $(DESTDIR)$(INSTDIR); \
-+	done
+@@ -91,10 +91,10 @@
+ install: $(EXECS) $(COMMON)
+ 	install -d $(INSTDIR)
+ 	for name in $^; \
+-	 do install -s -o root -g root -m 755 $$name $(INSTDIR); \
++	 do install -s -m 755 $$name $(INSTDIR); \
+ 	done
+ 	for mp in $(MAN_PGS); \
+-	 do install -o root -g root -m 644 $$mp $(MANDIR)/$(MAN_PREF); \
++	 do install -s -m 644 $$mp $(MANDIR)/$(MAN_PREF); \
+ 	 gzip -9f $(MANDIR)/$(MAN_PREF)/$$mp; \
+ 	done
  
