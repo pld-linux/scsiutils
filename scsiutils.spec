@@ -10,9 +10,13 @@ Epoch:		1
 License:	GPL v2
 Group:		Applications/System
 Source0:	ftp://tsx-11.mit.edu/pub/linux/ALPHA/scsi/scsiinfo-%{scsiinfo_ver}.tar.gz
+# Source0-md5:	1d7a9a42e84430d14b2fbfee342a950c
 Source1:	http://www.torque.net/sg/p/sg_utils-%{sg_utils_ver}.tgz
+# Source1-md5:	0cc05b0e602f964f532565459dde0625
 Source2:	http://www.garloff.de/kurt/linux/scsidev/scsidev-%{scsidev_ver}.tar.gz
+# Source2-md5:	0401dc3afbd8c6a66c704b6391701640
 Source3:	http://www.garloff.de/kurt/linux/rescan-scsi-bus.sh
+# Source3-md5:	5d63fa32b14da5c422cfa45ed6ba4f47
 Patch0:		scsiinfo-glibc.patch
 Patch1:		scsiinfo-makefile.patch
 Patch2:		scsiinfo-misc.patch
