@@ -1,26 +1,29 @@
+%define	sg_utils_ver	0.97
+%define	scsidev_ver	2.10
+%define	scsiinfo_ver	1.7
 Summary:	SCSI utilities
 Summary(pl):	Narzêdzia do SCSI
 Name:		scsiutils
-Version:	1.7.2.10.000207
-Release:	2
-License:	GPL
+Version:	%{scsiinfo_ver}.%{scsidev_ver}.%{sg_utils_ver}
+Release:	1
+Epoch:		1
+License:	GPL v2
 Group:		Applications/System
 Group(de):	Applikationen/System
 Group(pl):	Aplikacje/System
-Source0:	ftp://tsx-11.mit.edu/pub/linux/ALPHA/scsi/scsiinfo-1.7.tar.gz
-Source1:	http://www.torque.net/sg/p/sg_utils000207.tgz
-Source2:	http://www.garloff.de/kurt/linux/scsidev/scsidev-2.10.tar.gz
+Source0:	ftp://tsx-11.mit.edu/pub/linux/ALPHA/scsi/scsiinfo-%{scsiinfo_ver}.tar.gz
+Source1:	http://www.torque.net/sg/p/sg_utils-%{sg_utils_ver}.tgz
+Source2:	http://www.garloff.de/kurt/linux/scsidev/scsidev-%{scsidev_ver}.tar.gz
 Source3:	http://www.garloff.de/kurt/linux/rescan-scsi-bus.sh
 Patch0:		scsiinfo-glibc.patch
 Patch1:		scsiinfo-makefile.patch
 Patch2:		scsiinfo-misc.patch
 Patch3:		scsiinfo-tmpdir.patch
 Patch4:		sg_utils-makefile.patch
-Patch5:		sg_utils-misc.patch
-Patch6:		scsidev-makefile.patch
-BuildRequires:	tk-devel
+Patch5:		scsidev-makefile.patch
 BuildRequires:	autoconf
 BuildRequires:	automake
+BuildRequires:	tk-devel
 Provides:	scsiinfo sg_utils scsidev
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -85,104 +88,109 @@ stronami trybów SCSI.
 
 %prep
 %setup -q -c -a1 -a2
-cd scsiinfo-1.7
+cd scsiinfo-%{scsiinfo_ver}
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
-cd ../sg_utils
+cd ../sg_utils-%{sg_utils_ver}
 %patch4 -p1
+cd ../scsidev-%{scsidev_ver}
 %patch5 -p1
-cd ../scsidev-2.10
-%patch6 -p1
 
 %build
-cd scsiinfo-1.7
+cd scsiinfo-%{scsiinfo_ver}
 %{__make} clean
 %{__make} OPT="%{rpmcflags}"
 
-cd ../scsidev-2.10
+cd ../scsidev-%{scsidev_ver}
 aclocal
 autoconf
 %configure
 %{__make}
 
-cd ../sg_utils
+cd ../sg_utils-%{sg_utils_ver}
 mv -f README README.sg
-%{__make} OPT="%{rpmcflags}"
+%{__make} OPT="%{rpmcflags}" PREFIX=%{_prefix}
 
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/sbin,%{_sbindir},%{_bindir},%{_libdir}/scsi,%{_mandir}/man8}
 
-cd scsiinfo-1.7
+cd scsiinfo-%{scsiinfo_ver}
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-cd ../scsidev-2.10
+cd ../scsidev-%{scsidev_ver}
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT \
 	bindir=/sbin
 
 install %{SOURCE3} $RPM_BUILD_ROOT/sbin/rescan-scsi-bus
 
-cd ../sg_utils
+cd ../sg_utils-%{sg_utils_ver}
 %{__make} install \
-	DESTDIR=$RPM_BUILD_ROOT
+	DESTDIR=$RPM_BUILD_ROOT PREFIX=%{_prefix}
 cd ..
 
 gunzip $RPM_BUILD_ROOT%{_mandir}/man8/*.gz
-gzip -9nf scsiinfo-1.7/{0-CHANGES,0-README.first,0-TODO} \
-	scsidev-2.10/{boot.diff,CHANGES,README,TODO} \
-	sg_utils/README.sg
+gzip -9nf scsiinfo-%{scsiinfo_ver}/{0-CHANGES,0-README.first,0-TODO} \
+	scsidev-%{scsidev_ver}/{boot.diff,CHANGES,README,TODO} \
+	sg_utils-%{sg_utils_ver}/{README.sg,README.sg_start,CHANGELOG}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc scsiinfo-1.7/{0-CHANGES,0-README.first,0-TODO}.gz
-%doc scsidev-2.10/{boot.diff,CHANGES,README,TODO}.gz
-%doc sg_utils/README.sg.gz
+%doc scsiinfo-%{scsiinfo_ver}/*.gz scsidev-%{scsidev_ver}/*.gz sg_utils-%{sg_utils_ver}/*.gz
 %attr(755,root,root) /sbin/scsidev
 %attr(755,root,root) /sbin/rescan-scsi-bus
 %attr(755,root,root) %{_sbindir}/sgcheck
-%attr(755,root,root) %{_bindir}/scsiinfo
 %attr(755,root,root) %{_bindir}/scsiformat
-%attr(755,root,root) %{_bindir}/sg_poll
-%attr(755,root,root) %{_bindir}/sg_dd512
-%attr(755,root,root) %{_bindir}/sgq_dd512
+%attr(755,root,root) %{_bindir}/scsiinfo
+%attr(755,root,root) %{_bindir}/scsi_inquiry
+%attr(755,root,root) %{_bindir}/sginfo
 %attr(755,root,root) %{_bindir}/sgp_dd 
-%attr(755,root,root) %{_bindir}/sg_dd2048
-%attr(755,root,root) %{_bindir}/sg_whoami
-%attr(755,root,root) %{_bindir}/sg_inquiry
-%attr(755,root,root) %{_bindir}/sg_tst_med
+%attr(755,root,root) %{_bindir}/sg_dd
 %attr(755,root,root) %{_bindir}/sg_debug
-%attr(755,root,root) %{_bindir}/sg_scan 
+%attr(755,root,root) %{_bindir}/sg_inq
+%attr(755,root,root) %{_bindir}/sg_map 
 %attr(755,root,root) %{_bindir}/sg_rbuf
+%attr(755,root,root) %{_bindir}/sg_read
+%attr(755,root,root) %{_bindir}/sg_readcap
 %attr(755,root,root) %{_bindir}/sg_runt_ex
+%attr(755,root,root) %{_bindir}/sg_scan 
 %attr(755,root,root) %{_bindir}/sg_simple1 
 %attr(755,root,root) %{_bindir}/sg_simple2
-%attr(755,root,root) %{_bindir}/sg_readcap
-%attr(755,root,root) %{_bindir}/sg_map 
+%attr(755,root,root) %{_bindir}/sg_start
 %attr(755,root,root) %{_bindir}/sg_test_rwbuf
-%attr(755,root,root) %{_bindir}/scsi_inquiry 
-%attr(755,root,root) %{_bindir}/sginfo
-%{_mandir}/man8/scsiinfo.8*
-%{_mandir}/man8/scsiformat.8*
+%attr(755,root,root) %{_bindir}/sg_turs
+%attr(755,root,root) %{_bindir}/sg_whoami
 %{_mandir}/man8/scsidev.8*
+%{_mandir}/man8/scsiformat.8*
+%{_mandir}/man8/scsiinfo.8*
+%{_mandir}/man8/sg_dd.8*
+%{_mandir}/man8/sg_map.8*
+%{_mandir}/man8/sg_rbuf.8*
+%{_mandir}/man8/sgp_dd.8*
+#%attr(755,root,root) %{_bindir}/sg_poll
+#%attr(755,root,root) %{_bindir}/sg_dd512
+#%attr(755,root,root) %{_bindir}/sgq_dd512
+#%attr(755,root,root) %{_bindir}/sg_dd2048
+#%attr(755,root,root) %{_bindir}/sg_tst_med
 
 %files tk
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/scsi-config
 %attr(755,root,root) %{_bindir}/tk_scsiformat
 %dir %{_libdir}/scsi
-%{_libdir}/scsi/generic
 %attr(755,root,root) %{_libdir}/scsi/cache
 %attr(755,root,root) %{_libdir}/scsi/control
 %attr(755,root,root) %{_libdir}/scsi/disconnect
 %attr(755,root,root) %{_libdir}/scsi/error
 %attr(755,root,root) %{_libdir}/scsi/format
+%attr(644,root,root) %{_libdir}/scsi/generic
 %attr(755,root,root) %{_libdir}/scsi/inquiry
 %attr(755,root,root) %{_libdir}/scsi/notch
 %attr(755,root,root) %{_libdir}/scsi/overview
@@ -192,5 +200,5 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/scsi/save-file
 %attr(755,root,root) %{_libdir}/scsi/tworands
 %attr(755,root,root) %{_libdir}/scsi/verify
-%{_mandir}/man8/tk_scsiformat.8*
 %{_mandir}/man8/scsi-config.8*
+%{_mandir}/man8/tk_scsiformat.8*
