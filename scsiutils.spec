@@ -39,12 +39,12 @@ A collection of useful tools for users of SCSI systems:
 - rescan-scsi-bus.sh: Script that scans the SCSI bus and dynamicaaly
   adds (and optionally removes) devices.
 - sg_utils: A colection of small useful tools, that are based on the
-  sg interface and give info on the SCSI bus, copy data... Warning:
-  Some of these tools access the internals of your system and a wrong
-  usage of them may render your system inoperational.
+  sg interface and give info on the SCSI bus, copy data... Warning: Some
+  of these tools access the internals of your system and a wrong usage
+  of them may render your system inoperational.
 
-Note: scsiinfo comes with a graphical user interface which can be found
-in the scsiutils-tk package.
+Note: scsiinfo comes with a graphical user interface which can be
+found in the scsiutils-tk package.
 
 %description -l pl
 Zestaw u¿ytecznych narzêdzi dla u¿ytkowników systemów SCSI:
@@ -54,15 +54,14 @@ Zestaw u¿ytecznych narzêdzi dla u¿ytkowników systemów SCSI:
 - scsiformat: narzêdzie do niskopoziomowego formatowania dysków SCSI.
 - scsidev: je¿eli Twoja konfiguracja SCSI zmienia siê, np. poniewa¿
   masz urz±dzenia zewnêtrzne nie zawsze pod³±czone lub w³±czone,
-  mapowania j±dra dotycz±ce urz±dzeñ SCSI nie s± takie same. Ten
-  program tworzy mapowanie nie zmieniaj±ce siê w wiêkszo¶ci
-  przypadków.
+  mapowania j±dra dotycz±ce urz±dzeñ SCSI nie s± takie same. Ten program
+  tworzy mapowanie nie zmieniaj±ce siê w wiêkszo¶ci przypadków.
 - rescan-scsi-bus.sh: skrypt skanuj±cy szynê SCSI i dynamicznie
   dodaj±cy (opcjonalnie tak¿e usuwaj±cy) urz±dzenia.
 - sg_utils: zestaw ma³ych narzêdzi bazuj±cych na interfejsie sg
-  udostêpniaj±cych informacje o szynie SCSI, kopiuj±cych dane...
-  Uwaga: czê¶æ z nich u¿ywa dostêpu do wnêtrzno¶ci systemu i z³e ich
-  u¿ycie mo¿e uczyniæ system niedzia³aj±cym.
+  udostêpniaj±cych informacje o szynie SCSI, kopiuj±cych dane... Uwaga:
+  czê¶æ z nich u¿ywa dostêpu do wnêtrzno¶ci systemu i z³e ich u¿ycie
+  mo¿e uczyniæ system niedzia³aj±cym.
 
 Dostêpny jest interfejs graficzny do scsiinfo - znajduje siê w
 pakiecie scsiutils-tk.
@@ -147,17 +146,17 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/scsiinfo
 %attr(755,root,root) %{_bindir}/scsi_inquiry
 %attr(755,root,root) %{_bindir}/sginfo
-%attr(755,root,root) %{_bindir}/sgp_dd 
+%attr(755,root,root) %{_bindir}/sgp_dd
 %attr(755,root,root) %{_bindir}/sg_dd
 %attr(755,root,root) %{_bindir}/sg_debug
 %attr(755,root,root) %{_bindir}/sg_inq
-%attr(755,root,root) %{_bindir}/sg_map 
+%attr(755,root,root) %{_bindir}/sg_map
 %attr(755,root,root) %{_bindir}/sg_rbuf
 %attr(755,root,root) %{_bindir}/sg_read
 %attr(755,root,root) %{_bindir}/sg_readcap
 %attr(755,root,root) %{_bindir}/sg_runt_ex
-%attr(755,root,root) %{_bindir}/sg_scan 
-%attr(755,root,root) %{_bindir}/sg_simple1 
+%attr(755,root,root) %{_bindir}/sg_scan
+%attr(755,root,root) %{_bindir}/sg_simple1
 %attr(755,root,root) %{_bindir}/sg_simple2
 %attr(755,root,root) %{_bindir}/sg_start
 %attr(755,root,root) %{_bindir}/sg_test_rwbuf
