@@ -117,3 +117,90 @@ for host in $hosts; do
 done
 echo "$found new device(s) found."
 echo "$rmvd device(s) removed."
+ echo "Options:"
+    echo " -l activates scanning for LUNs 0-7    [default: 0]"
+    echo " -w scan for target device IDs 0 .. 15 [default: 0-7]"
+    echo " -c enables scanning of channels 0 1   [default: 0]"
+    echo " -r enables removing of devices        [default: disabled]"
+    echo "--remove:        same as -r"
+    echo "--nooptscan:     don't stop looking for LUNs is 0 is not found"
+    echo "--color:         use coloured prefixes OLD/NEW/DEL"
+    echo "--hosts=LIST:    Scan only host(s) in LIST"
+    echo "--channels=LIST: Scan only channel(s) in LIST"
+    echo "--ids=LIST:      Scan only target ID(s) in LIST"
+    echo "--luns=LIST:     Scan only lun(s) in LIST"  
+    echo " Host numbers may thus be specified either directly on cmd line (deprecated) or"
+    echo " or with the --hosts=LIST parameter (recommended)."
+    echo "LIST: A[-B][,C[-D]]... is a comma separated list of single values and ranges"
+    echo " (No spaces allowed.)"
+    exit 0
+fi
+
+expandlist ()
+{
+    list=$1
+    result=""
+    first=${list%%,*}
+    rest=${list#*,}
+    while test ! -z "$first"; do 
+	beg=${first%%-*};
+	if test "$beg" = "$first"; then
+	    result="$result $beg";
+    	else
+    	    end=${first#*-}
+	    result="$result `seq $beg $end`"
+	fi
+	test "$rest" = "$first" && rest=""
+	first=${rest%%,*}
+	rest=${rest#*,}
+    done
+    echo $result
+}
+
+# defaults
+unsetcolor
+lunsearch="0"
+idsearch=`seq 0 7`
+channelsearch="0"
+remove=""
+optscan=1
+findhosts;
+
+# Scan options
+opt="$1"
+while test ! -z "$opt" -a -z "${opt##-*}"; do
+  opt=${opt#-}
+  case "$opt" in
+    l) lunsearch=`seq 0 7` ;;
+    w) idsearch=`seq 0 15` ;;
+    c) channelsearch="0 1" ;;
+    r) remove=1 ;;
+    -remove)      remove=1 ;;
+    -hosts=*)     arg=${opt#-hosts=};   hosts=`expandlist $arg` ;;
+    -channels=*)  arg=${opt#-channels=};channelsearch=`expandlist $arg` ;; 
+    -ids=*)   arg=${opt#-ids=};         idsearch=`expandlist $arg` ;; 
+    -luns=*)  arg=${opt#-luns=};        lunsearch=`expandlist $arg` ;; 
+    -color) setcolor ;;
+    -nooptscan) optscan=0 ;;
+    *) echo "Unknown option -$opt !" ;;
+  esac
+  shift
+  opt="$1"
+done    
+
+# Hosts given ?
+if test @$1 != @; then 
+  hosts=$*; 
+fi
+
+echo "Scanning hosts $hosts channels $channelsearch for "
+echo " SCSI target IDs " $idsearch ", LUNs " $lunsearch
+test -z "$remove" || echo " and remove devices that have disappeared"
+declare -i found=0
+declare -i rmvd=0
+for host in $hosts; do 
+  dosearch; 
+done
+echo "$found new device(s) found.               "
+echo "$rmvd device(s) removed.                 "
+
