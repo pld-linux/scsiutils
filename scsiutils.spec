@@ -2,7 +2,7 @@ Summary:	SCSI utilities
 Summary(pl):	Narzêdzia do SCSI
 Name:		scsiutils
 Version:	1.7.2.10.000207
-Release:	1
+Release:	2
 License:	GPL
 Group:		Applications/System
 Group(de):	Applikationen/System
@@ -74,6 +74,8 @@ cd scsiinfo-1.7
 %{__make} OPT="%{rpmcflags}"
 
 cd ../scsidev-2.10
+aclocal
+autoconf
 %configure
 %{__make}
 
