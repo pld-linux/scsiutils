@@ -1,5 +1,5 @@
-%define	sg_utils_ver	0.97
-%define	scsidev_ver	2.10
+%define	sg_utils_ver	1.02
+%define	scsidev_ver	2.35
 %define	scsiinfo_ver	1.7
 Summary:	SCSI utilities
 Summary(pl):	Narzêdzia do SCSI
@@ -12,9 +12,9 @@ Group:		Applications/System
 Source0:	ftp://tsx-11.mit.edu/pub/linux/ALPHA/scsi/scsiinfo-%{scsiinfo_ver}.tar.gz
 # Source0-md5:	1d7a9a42e84430d14b2fbfee342a950c
 Source1:	http://www.torque.net/sg/p/sg_utils-%{sg_utils_ver}.tgz
-# Source1-md5:	0cc05b0e602f964f532565459dde0625
+# Source1-md5:	127860ff59d9cff0faf3929494c413d3
 Source2:	http://www.garloff.de/kurt/linux/scsidev/scsidev-%{scsidev_ver}.tar.gz
-# Source2-md5:	0401dc3afbd8c6a66c704b6391701640
+# Source2-md5:	1ef22cb2ae19c65ae644b34202b7995e
 Source3:	http://www.garloff.de/kurt/linux/rescan-scsi-bus.sh
 # It is md5 of the original file, in CVS we have different because of CVS tags
 # NoSource3-md5:	8d1b28c31b1edda2849fba7b0910b93f
@@ -174,6 +174,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man8/sg_dd.8*
 %{_mandir}/man8/sg_map.8*
 %{_mandir}/man8/sg_rbuf.8*
+%{_mandir}/man8/sg_read.8*
 %{_mandir}/man8/sgp_dd.8*
 #%attr(755,root,root) %{_bindir}/sg_poll
 #%attr(755,root,root) %{_bindir}/sg_dd512
