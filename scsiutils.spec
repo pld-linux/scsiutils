@@ -129,16 +129,15 @@ cd ../sg_utils-%{sg_utils_ver}
 cd ..
 
 gunzip $RPM_BUILD_ROOT%{_mandir}/man8/*.gz
-gzip -9nf scsiinfo-%{scsiinfo_ver}/{0-CHANGES,0-README.first,0-TODO} \
-	scsidev-%{scsidev_ver}/{boot.diff,CHANGES,README,TODO} \
-	sg_utils-%{sg_utils_ver}/{README.sg,README.sg_start,CHANGELOG}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc scsiinfo-%{scsiinfo_ver}/*.gz scsidev-%{scsidev_ver}/*.gz sg_utils-%{sg_utils_ver}/*.gz
+%doc scsiinfo-%{scsiinfo_ver}/{0-CHANGES,0-README.first,0-TODO}
+%doc scsidev-%{scsidev_ver}/{boot.diff,CHANGES,README,TODO}
+%doc sg_utils-%{sg_utils_ver}/{README.sg,README.sg_start,CHANGELOG}
 %attr(755,root,root) /sbin/scsidev
 %attr(755,root,root) /sbin/rescan-scsi-bus
 %attr(755,root,root) %{_sbindir}/sgcheck
