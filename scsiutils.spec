@@ -5,7 +5,7 @@ Summary:	SCSI utilities
 Summary(pl):	Narzêdzia do SCSI
 Name:		scsiutils
 Version:	%{scsiinfo_ver}.%{scsidev_ver}.%{sg_utils_ver}
-Release:	4
+Release:	1
 Epoch:		1
 License:	GPL v2
 Group:		Applications/System
