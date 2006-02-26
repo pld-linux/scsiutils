@@ -104,17 +104,20 @@ cd ../scsidev-%{scsidev_ver}
 cd scsiinfo-%{scsiinfo_ver}
 %{__make} clean
 %{__make} \
+	CC="%{__cc}" \
 	OPT="%{rpmcflags}"
 
 cd ../scsidev-%{scsidev_ver}
 %{__aclocal}
 %{__autoconf}
 %configure
-%{__make}
+%{__make} \
+	CC="%{__cc}"
 
 cd ../sg_utils-%{sg_utils_ver}
 mv -f README README.sg
 %{__make} \
+	CC="%{__cc}" \
 	OPT="%{rpmcflags}" \
 	PREFIX=%{_prefix}
 
