@@ -26,7 +26,9 @@ Patch5:		scsidev-makefile.patch
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	tk-devel
-Provides:	scsiinfo sg_utils scsidev
+Provides:	scsidev
+Provides:	scsiinfo
+Provides:	sg_utils
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_ulibdir	%{_prefix}/lib
@@ -194,7 +196,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_ulibdir}/scsi/disconnect
 %attr(755,root,root) %{_ulibdir}/scsi/error
 %attr(755,root,root) %{_ulibdir}/scsi/format
-%attr(644,root,root) %{_ulibdir}/scsi/generic
+%{_ulibdir}/scsi/generic
 %attr(755,root,root) %{_ulibdir}/scsi/inquiry
 %attr(755,root,root) %{_ulibdir}/scsi/notch
 %attr(755,root,root) %{_ulibdir}/scsi/overview
