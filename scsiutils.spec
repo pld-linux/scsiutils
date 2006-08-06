@@ -106,12 +106,14 @@ cd scsiinfo-%{scsiinfo_ver}
 %{__make} clean
 %{__make} \
 	CC="%{__cc}" \
+	LDFLAGS="%{rpmldflags}" \
 	OPT="%{rpmcflags}"
 
 cd ../scsidev-%{scsidev_ver}
 %{__aclocal}
 %{__autoconf}
-%configure
+%configure \
+	CFLAGS="%{rpmcflags} %{rpmldflags}"
 %{__make} \
 	CC="%{__cc}"
 
@@ -119,6 +121,8 @@ cd ../sg_utils-%{sg_utils_ver}
 mv -f README README.sg
 %{__make} \
 	CC="%{__cc}" \
+	LD="%{__cc}" \
+	LDFLAGS="%{rpmldflags}" \
 	OPT="%{rpmcflags}" \
 	PREFIX=%{_prefix}
 
