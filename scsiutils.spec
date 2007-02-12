@@ -2,7 +2,7 @@
 %define	scsidev_ver	2.35
 %define	scsiinfo_ver	1.7
 Summary:	SCSI utilities
-Summary(pl):	Narzêdzia do SCSI
+Summary(pl.UTF-8):   NarzÄ™dzia do SCSI
 Name:		scsiutils
 Version:	%{scsiinfo_ver}.%{scsidev_ver}.%{sg_utils_ver}
 Release:	1
@@ -54,29 +54,29 @@ A collection of useful tools for users of SCSI systems:
 Note: scsiinfo comes with a graphical user interface which can be
 found in the scsiutils-tk package.
 
-%description -l pl
-Zestaw u¿ytecznych narzêdzi dla u¿ytkowników systemów SCSI:
-- scsiinfo: pozwala na dostêp do niektórych informacji wewnêtrznych
-  SCSI, takich jak listy defektów, strony trybów (kontroluj±cych
-  zachowanie cache urz±dzenia i obs³ugê b³êdów).
-- scsiformat: narzêdzie do niskopoziomowego formatowania dysków SCSI.
-- scsidev: je¿eli Twoja konfiguracja SCSI zmienia siê, np. poniewa¿
-  masz urz±dzenia zewnêtrzne nie zawsze pod³±czone lub w³±czone,
-  mapowania j±dra dotycz±ce urz±dzeñ SCSI nie s± takie same. Ten program
-  tworzy mapowanie nie zmieniaj±ce siê w wiêkszo¶ci przypadków.
-- rescan-scsi-bus.sh: skrypt skanuj±cy szynê SCSI i dynamicznie
-  dodaj±cy (opcjonalnie tak¿e usuwaj±cy) urz±dzenia.
-- sg_utils: zestaw ma³ych narzêdzi bazuj±cych na interfejsie sg
-  udostêpniaj±cych informacje o szynie SCSI, kopiuj±cych dane... Uwaga:
-  czê¶æ z nich u¿ywa dostêpu do wnêtrzno¶ci systemu i z³e ich u¿ycie
-  mo¿e uczyniæ system niedzia³aj±cym.
+%description -l pl.UTF-8
+Zestaw uÅ¼ytecznych narzÄ™dzi dla uÅ¼ytkownikÃ³w systemÃ³w SCSI:
+- scsiinfo: pozwala na dostÄ™p do niektÃ³rych informacji wewnÄ™trznych
+  SCSI, takich jak listy defektÃ³w, strony trybÃ³w (kontrolujÄ…cych
+  zachowanie cache urzÄ…dzenia i obsÅ‚ugÄ™ bÅ‚Ä™dÃ³w).
+- scsiformat: narzÄ™dzie do niskopoziomowego formatowania dyskÃ³w SCSI.
+- scsidev: jeÅ¼eli Twoja konfiguracja SCSI zmienia siÄ™, np. poniewaÅ¼
+  masz urzÄ…dzenia zewnÄ™trzne nie zawsze podÅ‚Ä…czone lub wÅ‚Ä…czone,
+  mapowania jÄ…dra dotyczÄ…ce urzÄ…dzeÅ„ SCSI nie sÄ… takie same. Ten program
+  tworzy mapowanie nie zmieniajÄ…ce siÄ™ w wiÄ™kszoÅ›ci przypadkÃ³w.
+- rescan-scsi-bus.sh: skrypt skanujÄ…cy szynÄ™ SCSI i dynamicznie
+  dodajÄ…cy (opcjonalnie takÅ¼e usuwajÄ…cy) urzÄ…dzenia.
+- sg_utils: zestaw maÅ‚ych narzÄ™dzi bazujÄ…cych na interfejsie sg
+  udostÄ™pniajÄ…cych informacje o szynie SCSI, kopiujÄ…cych dane... Uwaga:
+  czÄ™Å›Ä‡ z nich uÅ¼ywa dostÄ™pu do wnÄ™trznoÅ›ci systemu i zÅ‚e ich uÅ¼ycie
+  moÅ¼e uczyniÄ‡ system niedziaÅ‚ajÄ…cym.
 
-Dostêpny jest interfejs graficzny do scsiinfo - znajduje siê w
+DostÄ™pny jest interfejs graficzny do scsiinfo - znajduje siÄ™ w
 pakiecie scsiutils-tk.
 
 %package tk
 Summary:	Tk graphical frontend for scsiinfo
-Summary(pl):	Graficzny frontend do scsiinfo oparty o Tk
+Summary(pl.UTF-8):   Graficzny frontend do scsiinfo oparty o Tk
 Group:		X11/Applications
 Requires:	%{name} = %{epoch}:%{version}-%{release}
 Requires:	tk
@@ -85,9 +85,9 @@ Requires:	tk
 For visualization and manipulation of SCSI mode pages, scsiinfo comes
 with graphical interface.
 
-%description tk -l pl
+%description tk -l pl.UTF-8
 Graficzny interfejs do scsiinfo - do wizualizacji i manipulowania
-stronami trybów SCSI.
+stronami trybÃ³w SCSI.
 
 %prep
 %setup -q -c -a1 -a2
