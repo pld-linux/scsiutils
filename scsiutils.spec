@@ -2,7 +2,7 @@
 %define	scsidev_ver	2.35
 %define	scsiinfo_ver	1.7
 Summary:	SCSI utilities
-Summary(pl.UTF-8):   Narzędzia do SCSI
+Summary(pl.UTF-8):	Narzędzia do SCSI
 Name:		scsiutils
 Version:	%{scsiinfo_ver}.%{scsidev_ver}.%{sg_utils_ver}
 Release:	1
@@ -76,7 +76,7 @@ pakiecie scsiutils-tk.
 
 %package tk
 Summary:	Tk graphical frontend for scsiinfo
-Summary(pl.UTF-8):   Graficzny frontend do scsiinfo oparty o Tk
+Summary(pl.UTF-8):	Graficzny frontend do scsiinfo oparty o Tk
 Group:		X11/Applications
 Requires:	%{name} = %{epoch}:%{version}-%{release}
 Requires:	tk
