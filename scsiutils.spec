@@ -105,7 +105,7 @@ cd ../scsidev-%{scsidev_ver}
 cd scsiinfo-%{scsiinfo_ver}
 %{__make} clean
 %{__make} \
-	CC="%{__cc}" \
+	CC="%{__cc} -DCONFIG_BLOCK=1" \
 	LDFLAGS="%{rpmldflags}" \
 	OPT="%{rpmcflags}"
 
