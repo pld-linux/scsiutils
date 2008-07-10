@@ -1,28 +1,24 @@
-%define	scsidev_ver	2.35
 %define	scsiinfo_ver	1.7
 Summary:	SCSI utilities
 Summary(pl.UTF-8):	Narzędzia do SCSI
 Name:		scsiutils
-Version:	%{scsiinfo_ver}.%{scsidev_ver}
+Version:	%{scsiinfo_ver}
 Release:	2
 Epoch:		1
 License:	GPL v2
 Group:		Applications/System
 Source0:	ftp://tsx-11.mit.edu/pub/linux/ALPHA/scsi/scsiinfo-%{scsiinfo_ver}.tar.gz
 # Source0-md5:	1d7a9a42e84430d14b2fbfee342a950c
-Source2:	http://www.garloff.de/kurt/linux/scsidev/scsidev-%{scsidev_ver}.tar.gz
-# Source2-md5:	1ef22cb2ae19c65ae644b34202b7995e
 Source3:	http://www.garloff.de/kurt/linux/rescan-scsi-bus.sh
 # Source3-md5:	794f4c8f35a6036b8ae1e1310f46353b
 Patch0:		scsiinfo-glibc.patch
 Patch1:		scsiinfo-makefile.patch
 Patch2:		scsiinfo-misc.patch
 Patch3:		scsiinfo-tmpdir.patch
-Patch5:		scsidev-makefile.patch
-BuildRequires:	autoconf
-BuildRequires:	automake
 BuildRequires:	tk-devel
-Provides:	scsidev
+# sg_turs and sg_inq commands used by rescan-scsi-bus.sh
+Requires:	sg3_utils
+Suggests:	scsidev
 Provides:	scsiinfo
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -83,8 +79,6 @@ cd scsiinfo-%{scsiinfo_ver}
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
-cd ../scsidev-%{scsidev_ver}
-%patch5 -p1
 
 %build
 cd scsiinfo-%{scsiinfo_ver}
@@ -94,24 +88,12 @@ cd scsiinfo-%{scsiinfo_ver}
 	LDFLAGS="%{rpmldflags}" \
 	OPT="%{rpmcflags}"
 
-cd ../scsidev-%{scsidev_ver}
-%{__aclocal}
-%{__autoconf}
-%configure \
-	CFLAGS="%{rpmcflags} %{rpmldflags}"
-%{__make} \
-	CC="%{__cc}"
-
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/sbin,%{_sbindir},%{_bindir},%{_ulibdir}/scsi,%{_mandir}/man8}
 
 %{__make} -C scsiinfo-%{scsiinfo_ver} install \
 	DESTDIR=$RPM_BUILD_ROOT
-
-%{__make} -C scsidev-%{scsidev_ver} install \
-	DESTDIR=$RPM_BUILD_ROOT \
-	bindir=/sbin
 
 install %{SOURCE3} $RPM_BUILD_ROOT/sbin/rescan-scsi-bus
 
@@ -123,8 +105,6 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc scsiinfo-%{scsiinfo_ver}/{0-CHANGES,0-README.first,0-TODO}
-%doc scsidev-%{scsidev_ver}/{boot.diff,CHANGES,README,TODO}
-%attr(755,root,root) /sbin/scsidev
 %attr(755,root,root) /sbin/rescan-scsi-bus
 %attr(755,root,root) %{_sbindir}/sgcheck
 %attr(755,root,root) %{_bindir}/scsiformat
@@ -132,7 +112,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/scsi_inquiry
 %attr(755,root,root) %{_bindir}/sginfo
 %attr(755,root,root) %{_bindir}/sgp_dd
-%{_mandir}/man8/scsidev.8*
 %{_mandir}/man8/scsiformat.8*
 %{_mandir}/man8/scsiinfo.8*
 
