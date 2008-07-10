@@ -35,7 +35,7 @@ A collection of useful tools for users of SCSI systems:
   connected then the kernel's mapping to the device nodes is not always
   the way you would expect it. This program creates a mapping which
   remains unchanged in most of these cases.
-- rescan-scsi-bus.sh: Script that scans the SCSI bus and dynamicaaly
+- rescan-scsi-bus.sh: Script that scans the SCSI bus and dynamically
   adds (and optionally removes) devices.
 
 Note: scsiinfo comes with a graphical user interface which can be
