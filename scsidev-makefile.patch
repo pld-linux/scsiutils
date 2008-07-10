@@ -1,13 +1,50 @@
---- scsidev-2.35/Makefile.in	2002-10-03 15:43:08.000000000 +0000
-+++ scsidev-2.35.new/Makefile.in	2005-01-03 23:15:37.767389208 +0000
-@@ -48,8 +48,8 @@
+--- scsidev-2.37/Makefile.in.orig	2008-07-10 19:30:46.519033000 +0200
++++ scsidev-2.37/Makefile.in	2008-07-10 19:31:52.643031281 +0200
+@@ -18,25 +18,26 @@
+ 
+ VERSION = $(shell cat VERSION)
+ 
+-prefix = $(DESTDIR)/usr
+-exec_prefix = $(DESTDIR)
++prefix = @prefix@
++exec_prefix = @exec_prefix@
+ 
+-bindir = $(exec_prefix)/bin
++bindir = @bindir@
+ docdir = $(prefix)/share/doc/packages
+ 
+ # Where to put the manual pages.
+-mandir = $(prefix)/share/man/man8
++mandir = @mandir@/man8
+ #mandir = $(prefix)/man/man8
+ # Extension (not including `.') for the manual page filenames.
+ manext = 8
+ 
+ #### End of system configuration section. ####
+ CFLAGS=@CFLAGS@ -Wall -DVERSION=\"$(VERSION)\" # -g -DDEBUG
++LDFLAGS=@LDFLAGS@
+ 
+ World: scsidev
+ 
+ scsidev: Makefile scsidev.c config.h
+-	${CC} ${CFLAGS} -o scsidev scsidev.c
++	${CC} ${LDFLAGS} ${CFLAGS} -o scsidev scsidev.c
+ 
+ Makefile: Makefile.in config.status
+ 	CONFIG_FILES=Makefile CONFIG_HEADERS= $(SHELL) ./config.status
+@@ -48,11 +49,10 @@
  	cd $(srcdir) && autoconf
  
  install: scsidev
 -	install -d $(bindir)
 -	install -m 755 -s scsidev $(bindir)
+-	install -d $(mandir)
+-	install -m 644 scsidev.8 $(mandir)
+-	gzip -9f $(mandir)/scsidev.8
 +	install -d $(DESTDIR)$(bindir)
 +	install -m 755 -s scsidev $(DESTDIR)$(bindir)
- 	install -d $(mandir)
- 	install -m 644 scsidev.8 $(mandir)
- 	gzip -9f $(mandir)/scsidev.8
++	install -d $(DESTDIR)$(mandir)
++	install -m 644 scsidev.8 $(DESTDIR)$(mandir)
+ 	if [ ! -d $(DESTDIR)/dev/scsi ]; then mkdir -p $(DESTDIR)/dev/scsi; fi
+ 	#install -d $(docdir)/scsidev
+ 	#install COPYING boot.diff README scsi.alias CHANGES $(docdir)/scsidev/
