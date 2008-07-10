@@ -1,7 +1,7 @@
 diff -uNr scsiinfo-1.7.orig/Makefile scsiinfo-1.7/Makefile
 --- scsiinfo-1.7.orig/Makefile	Sat Aug 23 15:12:46 1997
 +++ scsiinfo-1.7/Makefile	Tue Feb 29 22:34:50 2000
-@@ -1,28 +1,30 @@
+@@ -1,28 +1,33 @@
 -CFLAGS=-O2 -fomit-frame-pointer -Wall -fno-strength-reduce
 +CFLAGS=-Wall -D_GNU_SOURCE $(OPT)
  #CFLAGS=-g -Wall -fno-strength-reduce
@@ -30,13 +30,16 @@ diff -uNr scsiinfo-1.7.orig/Makefile scsiinfo-1.7/Makefile
 -	install-wish /usr/bin scsi-config tk_scsiformat
 -	cp tk/generic $(BINDIR)
 -	cp man8/* $(MANDIR)/man8
-+	install -s -m 755 scsiinfo scsiformat $(DESTDIR)/usr/bin
++	install -d $(DESTDIR)/usr/bin
++	install -m 755 scsiinfo scsiformat $(DESTDIR)/usr/bin
 +	install -d $(DESTDIR)$(BINDIR)
-+	install -s -m 755 tworands $(DESTDIR)$(BINDIR)
++	install -m 755 tworands $(DESTDIR)$(BINDIR)
 +	./install-wish $(DESTDIR)$(BINDIR) $(WISHEXECS)
 +	./install-wish $(DESTDIR)/usr/bin scsi-config tk_scsiformat
 +	install -m 644 tk/generic $(DESTDIR)$(BINDIR)
++	install -d $(DESTDIR)$(MANDIR)/man8
 +	install -m 644 man8/* $(DESTDIR)$(MANDIR)/man8
++	install -d $(DESTDIR)/usr/sbin
 +	install -m 755 sgcheck $(DESTDIR)/usr/sbin
  
  clean:
